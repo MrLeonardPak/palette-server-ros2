@@ -1,0 +1,3 @@
+[submodule "models-pkg"]
+	path = models-pkg
+	url = git@github.com:ArtemVinokurov/palitra_ros2.git
