@@ -1,7 +1,7 @@
 #ifndef PALETTE_SERVER_API_LIB_ROS_FOXY_ADAPTER_PKG_PAINTER_MODEL_NODE_HH
 #define PALETTE_SERVER_API_LIB_ROS_FOXY_ADAPTER_PKG_PAINTER_MODEL_NODE_HH
 
-#include "i-equipment-model.hh"
+#include "entity/interface/i-equipment-model.hh"
 
 #include "rclcpp/rclcpp.hpp"
 
