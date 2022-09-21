@@ -10,9 +10,7 @@ namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 class DobotManipulatorModelNode : public rclcpp::Node,
                                   public entity::IManipulatorModel {
  public:
-  DobotManipulatorModelNode(std::string_view node_name,
-                            std::string_view topic_name,
-                            dto::Region workzone);
+  DobotManipulatorModelNode(std::string_view node_name, dto::Region workzone);
   ~DobotManipulatorModelNode() = default;
 
   void SetPoseValue(dto::Pose pose) override;

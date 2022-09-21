@@ -2,10 +2,8 @@
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
-DobotManipulatorModelNode::DobotManipulatorModelNode(
-    std::string_view node_name,
-    std::string_view topic_name,
-    dto::Region workzone)
+DobotManipulatorModelNode::DobotManipulatorModelNode(std::string_view node_name,
+                                                     dto::Region workzone)
     : Node(node_name.data()), workzone_(workzone) {}
 
 void DobotManipulatorModelNode::SetPoseValue(dto::Pose pose) {
