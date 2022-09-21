@@ -1,7 +1,7 @@
 #ifndef PALETTE_SERVER_API_LIB_ROS_FOXY_ADAPTER_PKG_DOBOT_MANIPULATOR_MODEL_NODE_HH
 #define PALETTE_SERVER_API_LIB_ROS_FOXY_ADAPTER_PKG_DOBOT_MANIPULATOR_MODEL_NODE_HH
 
-#include "i-manipulator-model.hh"
+#include "entity/interface/i-manipulator-model.hh"
 
 #include "rclcpp/rclcpp.hpp"
 

@@ -1,4 +1,4 @@
-#include "dobot-manipulator-model-node.hh"
+#include "adapter-pkg/dobot-manipulator-model-node.hh"
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 

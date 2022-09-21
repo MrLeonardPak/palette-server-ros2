@@ -1,4 +1,4 @@
-#include "walking-platform-model-node.hh"
+#include "adapter-pkg/walking-platform-model-node.hh"
 #include "extra-constants.hh"
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
