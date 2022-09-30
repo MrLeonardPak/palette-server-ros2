@@ -7,13 +7,11 @@
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
-template <dto::property_tree_class PropertyTree>
+template <typename PropertyTree>
 class PainterModelNode : public rclcpp::Node,
                          public entity::IEquipmentModel<PropertyTree> {
  public:
-  PainterModelNode(std::string_view node_name,
-                   std::string_view topic_name,
-                   dto::Region workzone)
+  PainterModelNode(std::string_view node_name, dto::Region workzone)
       : Node(node_name.data()), workzone_(workzone) {}
   ~PainterModelNode() = default;
 
