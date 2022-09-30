@@ -29,7 +29,7 @@ target_include_directories(core
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
     $<INSTALL_INTERFACE:include>)
-ament_target_dependencies(coree adapter-pkg)
+ament_target_dependencies(core adapter-pkg)
 
 install(TARGETS
   core
