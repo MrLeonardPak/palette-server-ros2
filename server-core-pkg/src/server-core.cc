@@ -3,6 +3,7 @@
 #include <chrono>
 #include <iostream>
 #include <memory>
+#include <thread>
 
 #include "boost/property-tree.txx"
 #include "use_case/auto-control-uc.txx"
@@ -46,7 +47,17 @@ void ServerCore::Run() {
   //   rclcpp::sleep_for(3s);
   // }
 
-  platform->SetSpeedX(1.0);
+  auto executor = rclcpp::executors::StaticSingleThreadedExecutor();
+  auto t = std::thread([&executor]() { executor.spin(); });
+
+  executor.add_node(platform);
+
+  platform->ShiftX(2.0);
+  rclcpp::sleep_for(5s);
+  platform->SetSpeedX(231.0);
+  while (rclcpp::ok()) {
+    /* code */
+  }
   // rclcpp::spin(platform);
   // platform->SetSpeedX(0.0);
   // rclcpp::sleep_for(2s);

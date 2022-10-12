@@ -12,42 +12,50 @@ namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 WalkingPlatformModelNode::WalkingPlatformModelNode(std::string_view node_name,
                                                    std::string_view topic_name,
                                                    dto::Region workzone)
-    : Node(node_name.data()), workzone_(workzone) {
+    : Node(node_name.data()),
+      deadtime_(rclcpp::Time(0, 0, RCL_ROS_TIME)),
+      workzone_(workzone),
+      max_x_speed_(1) {
   publisher_ =
-      this->create_publisher<geometry_msgs::msg::Twist>(topic_name.data(), 10);
+      create_publisher<geometry_msgs::msg::Twist>(topic_name.data(), 10);
+  timer_ptr_ = create_wall_timer(
+      100ms, std::bind(&WalkingPlatformModelNode::TimerCallback, this));
+}
+
+void WalkingPlatformModelNode::TimerCallback() {
+  auto locker = std::scoped_lock(mutex_);
+  if (deadtime_.seconds() == 0.0 || now() <= deadtime_) {
+    publisher_->publish(msg_);
+    return;
+  }
+  publisher_->publish((geometry_msgs::msg::Twist()));
 }
 
 void WalkingPlatformModelNode::ShiftX(float shift) {
-  // TODO: Code here
-  RCLCPP_INFO(this->get_logger(), "Set shift X: '%d'", shift);
+  SetSpeedX(max_x_speed_);
+  deadtime_ = now() + rclcpp::Duration((shift / max_x_speed_) * powf(10, 9));
 }
 
 void WalkingPlatformModelNode::ShiftY(float shift) {
-  // TODO: Code here
-  RCLCPP_INFO(this->get_logger(), "Set shift Y: '%d'", shift);
+  RCLCPP_WARN(get_logger(), "Don`t use WalkingPlatformModelNode::ShiftY!");
+  ShiftX(shift);
 }
 
 // HACK: Метод Rotate должен принимать угол, а не скорость
 void WalkingPlatformModelNode::Rotate(float speed) {
-  auto msg = geometry_msgs::msg::Twist();
-  msg.angular.set__x(0.0).set__z(speed);
-  publisher_->publish(msg);
-  RCLCPP_INFO(this->get_logger(), "Set speed Z: '%f'", msg.linear.x);
+  auto locker = std::scoped_lock(mutex_);
+  msg_.angular.set__z(speed);
 }
 
 void WalkingPlatformModelNode::SetSpeedX(float speed) {
-  auto msg = geometry_msgs::msg::Twist();
-  // auto tmp = geometry_msgs::msg::Vector3();
-  // tmp.set__x(speed).set__y(speed).set__z(speed);
-  // msg.set__linear(tmp);
-  msg.linear.set__x(speed);
-  publisher_->publish(msg);
-  RCLCPP_INFO(this->get_logger(), "Set speed X: '%f'", msg.linear.x);
+  auto locker = std::scoped_lock(mutex_);
+  msg_.linear.set__x(speed);
+  deadtime_ = rclcpp::Time(0, 0, RCL_ROS_TIME);
 }
 
 void WalkingPlatformModelNode::SetSpeedY(float speed) {
-  // TODO: Code here
-  RCLCPP_INFO(this->get_logger(), "Set speed Y: '%d'", speed);
+  RCLCPP_WARN(get_logger(), "Don`t use WalkingPlatformModelNode::SetSpeedY!");
+  SetSpeedX(speed);
 }
 
 dto::Region WalkingPlatformModelNode::get_workzone() const {
