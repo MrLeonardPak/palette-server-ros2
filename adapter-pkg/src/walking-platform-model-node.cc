@@ -51,6 +51,7 @@ void WalkingPlatformModelNode::SetSpeedX(float speed) {
   auto locker = std::scoped_lock(mutex_);
   msg_.linear.set__x(speed);
   deadtime_ = rclcpp::Time(0, 0, RCL_ROS_TIME);
+  RCLCPP_INFO(get_logger(), "Set platform speed: %.2f", speed);
 }
 
 void WalkingPlatformModelNode::SetSpeedY(float speed) {
