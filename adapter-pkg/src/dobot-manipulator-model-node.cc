@@ -9,15 +9,15 @@ DobotManipulatorModelNode::DobotManipulatorModelNode(std::string_view node_name,
 void DobotManipulatorModelNode::SetPoseValue(dto::Pose pose) {
   // TODO: Code here
   RCLCPP_INFO(
-      get_logger(),
-      "Set Pose Value: point: x-'%.2f' y-'%.2f' z-'%.2f' orient: x-'%.2f' "
-      "y-'%.2f' z-'%.2f' w-'%.2f'",
+      get_logger(), "Set Pose Value: point: x-'%.2f' y-'%.2f' z-'%.2f' ",
+      // "orient: x-'%.2f' y-'%.2f' z-'%.2f' w-'%.2f'",
       pose.position.x, pose.position.y, pose.position.z, pose.orientetion.x,
       pose.orientetion.y, pose.orientetion.z, pose.orientetion.w);
 }
 void DobotManipulatorModelNode::SetPoseSpeed(float speed) {
   // TODO: Code here
-  RCLCPP_INFO(get_logger(), "Set Pose Speed: %.2f", speed);
+  static int count = 1;
+  RCLCPP_INFO(get_logger(), "%d Set Pose Speed: %.2f", count++, speed);
 }
 void DobotManipulatorModelNode::SetJointValue(int joint_num, float value) {
   // TODO: Code here

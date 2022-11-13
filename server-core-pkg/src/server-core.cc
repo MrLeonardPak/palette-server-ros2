@@ -21,7 +21,7 @@ void ServerCore::Run() {
 
   // XXX DO HERE!
 
-  auto zone = dto::Region({0.0, 0.0}, {1.0, 5.0});
+  auto zone = dto::Region({0.0, 0.0}, {1.0, 3.0});
   // std::cout << "Enter start point X Y:\n";
   // std::cin >> zone.points.first.x >> zone.points.first.y;
   // std::cout << "Enter end point X Y:\n";
@@ -32,11 +32,14 @@ void ServerCore::Run() {
   auto manipulator = std::make_shared<adapter_pkg::DobotManipulatorModelNode>(
       "dobot", dto::Region({0.0, 0.0}, {1.0, 1.0}));
   auto equipment = std::make_shared<adapter_pkg::PainterModelNode>(
-      "painter", dto::Region({0.0, 0.0}, {0.3, 0.3}));
+      "painter", dto::Region({0.0, 0.0}, {0.1, 1.0}));
 
   auto props = dto::PropTree();
-  props["overlay"] = 1.0f;
-  props["z-length"] = 0.1f;
+  props["overlay"] = 0.2f;
+  props["z-space"] = 0.1f;
+  props["manip-max-speed"] = 1.0f;
+  props["manip-y-shift"] = 0.0f;
+  props["manip-x-shift"] = 0.0f;
   auto robot =
       std::make_unique<dto::Robot>(1, platform, manipulator, equipment);
 
