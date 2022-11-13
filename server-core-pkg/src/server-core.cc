@@ -38,8 +38,9 @@ void ServerCore::Run() {
   props["overlay"] = 0.2f;
   props["z-space"] = 0.1f;
   props["manip-max-speed"] = 1.0f;
-  props["manip-y-shift"] = 0.0f;
   props["manip-x-shift"] = 0.0f;
+  props["manip-y-shift"] = 0.0f;
+  props["manip-z-shift"] = 0.0f;
   auto robot =
       std::make_unique<dto::Robot>(1, platform, manipulator, equipment);
 
