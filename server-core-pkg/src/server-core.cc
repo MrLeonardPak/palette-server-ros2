@@ -7,7 +7,7 @@
 
 #include "dto/prop-tree.hh"
 
-#include "use_case/auto-control-uc.txx"
+#include "use-case/auto-control-uc.hh"
 
 #include "adapter-pkg/dobot-manipulator-model-node.hh"
 #include "adapter-pkg/painter-model-node.txx"
@@ -17,15 +17,9 @@ using namespace std::chrono_literals;
 
 namespace palette_server_api::lib::ros_foxy::server_core_pkg {
 void ServerCore::Run() {
-  auto auto_control_uc = std::make_unique<use_case::AutoControlUC>();
-
   // XXX DO HERE!
 
   auto zone = dto::Region({0.0, 0.0}, {1.0, 3.0});
-  // std::cout << "Enter start point X Y:\n";
-  // std::cin >> zone.points.first.x >> zone.points.first.y;
-  // std::cout << "Enter end point X Y:\n";
-  // std::cin >> zone.points.second.x >> zone.points.second.y;
 
   auto platform = std::make_shared<adapter_pkg::WalkingPlatformModelNode>(
       "walking_platform", "cmd_linear", dto::Region({0.0, 0.0}, {1.0, 1.0}));
@@ -34,13 +28,13 @@ void ServerCore::Run() {
   auto equipment = std::make_shared<adapter_pkg::PainterModelNode>(
       "painter", dto::Region({0.0, 0.0}, {0.1, 1.0}));
 
-  auto props = dto::PropTree();
-  props["overlay"] = 0.2f;
-  props["z-space"] = 0.1f;
-  props["manip-max-speed"] = 1.0f;
-  props["manip-x-shift"] = 0.0f;
-  props["manip-y-shift"] = 0.0f;
-  props["manip-z-shift"] = 0.0f;
+  auto props = dto::PropertyAutoControlUC();
+  props.z_space = 0.1f;
+  props.manip_max_speed = 1.0f;
+  props.overlay = 0.2f;
+  props.manip_in_platform.x = 0.2;
+  props.manip_in_platform.y = 0.2;
+  props.manip_in_platform.z = 0.1;
   auto robot =
       std::make_unique<dto::Robot>(1, platform, manipulator, equipment);
 
@@ -51,15 +45,11 @@ void ServerCore::Run() {
   executor.add_node(manipulator);
   executor.add_node(equipment);
 
-  auto_control_uc->Execute(std::move(robot), zone, props);
+  std::make_shared<use_case::AutoControlUC>()->Execute(std::move(robot), zone,
+                                                       props);
+
   while (rclcpp::ok()) {
-    /* code */
   }
-  // rclcpp::spin(platform);
-  // platform->SetSpeedX(0.0);
-  // rclcpp::sleep_for(2s);
-  //   platform->Rotate(1.0);
-  //   auto_control_uc->Execute(std::move(robot), zone, params);
 }
 
 }  // namespace palette_server_api::lib::ros_foxy::server_core_pkg
