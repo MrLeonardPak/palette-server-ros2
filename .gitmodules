@@ -9,3 +9,4 @@
 [submodule "ui-pkg/ui"]
 	path = ui-pkg/ui
 	url = git@github.com:MrLeonardPak/palette-server-ui.git
+	branch = cli
