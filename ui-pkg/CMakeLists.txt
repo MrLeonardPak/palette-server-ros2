@@ -1,19 +1,25 @@
 cmake_minimum_required(VERSION 3.5)
-project(server-core-pkg)
+project(ui-pkg)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)
 endif()
 
-# Default to C++17
+# Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD 14)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
+
+# find dependencies
+find_package(ament_cmake REQUIRED)
+# uncomment the following section in order to fill in
+# further dependencies manually.
+# find_package(<dependency> REQUIRED)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -22,35 +28,26 @@ FetchContent_Declare(
   GIT_TAG v2.0.2
 )
 FetchContent_MakeAvailable(cli)
-# FetchContent_Populate(cli)
-# add_subdirectory(${cli_SOURCE_DIR} ${cli_BINARY_DIR})
 
-# find dependencies
-find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
-find_package(adapter-pkg REQUIRED)
-find_package(ui-pkg REQUIRED)
-
-add_executable(core src/main.cc
-                    src/server-core.cc)
-
-get_cmake_property(_variableNames VARIABLES)
-list (SORT _variableNames)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
-
-target_include_directories(core
+add_library(${PROJECT_NAME} STATIC ui/src/consol-ui/consol-ui.cc)
+target_link_libraries(${PROJECT_NAME} PRIVATE cli::cli)
+target_include_directories(${PROJECT_NAME}
   PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ui/inc>
     $<INSTALL_INTERFACE:include>)
-ament_target_dependencies(core adapter-pkg ui-pkg)
 
-install(TARGETS
-  core
-  DESTINATION lib/${PROJECT_NAME})
+ament_export_targets(${PROJECT_NAME} HAS_LIBRARY_TARGET)
+
+install(
+  DIRECTORY ui/inc/
+  DESTINATION include
+)
+
+install(
+  TARGETS ${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}
+  INCLUDES DESTINATION include
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

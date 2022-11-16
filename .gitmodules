@@ -6,3 +6,6 @@
 	path = api-pkg/api
 	url = git@github.com:MrLeonardPak/palette-server-api.git
 	branch = dev
+[submodule "ui-pkg/ui"]
+	path = ui-pkg/ui
+	url = git@github.com:MrLeonardPak/palette-server-ui.git
