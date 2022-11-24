@@ -31,32 +31,33 @@ void WalkingPlatformModelNode::TimerCallback() {
   publisher_->publish((geometry_msgs::msg::Twist()));
 }
 
-void WalkingPlatformModelNode::ShiftX(float shift) {
-  SetSpeedX(max_x_speed_);
-  deadtime_ = now() + rclcpp::Duration((shift / max_x_speed_) * powf(10, 9));
+void WalkingPlatformModelNode::ShiftY(float shift) {
+  RCLCPP_INFO(get_logger(), "Set platform shift: %.2f", shift);
+  // SetSpeedY(max_x_speed_);
+  // deadtime_ = now() + rclcpp::Duration((shift / max_x_speed_) * powf(10, 9));
 }
 
-void WalkingPlatformModelNode::ShiftY(float shift) {
-  RCLCPP_WARN(get_logger(), "Don`t use WalkingPlatformModelNode::ShiftY!");
-  ShiftX(shift);
+void WalkingPlatformModelNode::ShiftX(float shift) {
+  RCLCPP_WARN(get_logger(), "Don`t use WalkingPlatformModelNode::ShiftX!");
+  ShiftY(shift);
 }
 
 // HACK: Метод Rotate должен принимать угол, а не скорость
 void WalkingPlatformModelNode::Rotate(float speed) {
-  auto locker = std::scoped_lock(mutex_);
-  msg_.angular.set__z(speed);
-}
-
-void WalkingPlatformModelNode::SetSpeedX(float speed) {
-  auto locker = std::scoped_lock(mutex_);
-  msg_.linear.set__x(speed);
-  deadtime_ = rclcpp::Time(0, 0, RCL_ROS_TIME);
-  RCLCPP_INFO(get_logger(), "Set platform speed: %.2f", speed);
+  // auto locker = std::scoped_lock(mutex_);
+  // msg_.angular.set__z(speed);
 }
 
 void WalkingPlatformModelNode::SetSpeedY(float speed) {
-  RCLCPP_WARN(get_logger(), "Don`t use WalkingPlatformModelNode::SetSpeedY!");
-  SetSpeedX(speed);
+  // auto locker = std::scoped_lock(mutex_);
+  // msg_.linear.set__x(speed);
+  // deadtime_ = rclcpp::Time(0, 0, RCL_ROS_TIME);
+  RCLCPP_INFO(get_logger(), "Set platform speed: %.2f", speed);
+}
+
+void WalkingPlatformModelNode::SetSpeedX(float speed) {
+  RCLCPP_WARN(get_logger(), "Don`t use WalkingPlatformModelNode::SetSpeedX!");
+  SetSpeedY(speed);
 }
 
 dto::Region WalkingPlatformModelNode::get_workzone() const {
