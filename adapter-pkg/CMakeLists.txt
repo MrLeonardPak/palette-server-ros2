@@ -24,9 +24,8 @@ find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(api-pkg REQUIRED)
 
-add_library(${PROJECT_NAME} STATIC  src/walking-platform-model-node.cc
-                                    src/dobot-manipulator-model-node.cc
-                                    )
+add_library(${PROJECT_NAME} SHARED  src/walking-platform-model-node.cc
+                                    src/dobot-manipulator-model-node.cc)
 
 target_include_directories(${PROJECT_NAME}
   PUBLIC
@@ -45,6 +44,9 @@ install(
 install(
   TARGETS ${PROJECT_NAME}
   EXPORT ${PROJECT_NAME}
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
   INCLUDES DESTINATION include
 )
 

@@ -15,38 +15,16 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-include(FetchContent)
-FetchContent_Declare(
-  cli
-  GIT_REPOSITORY https://github.com/daniele77/cli.git
-  GIT_TAG v2.0.2
-)
-FetchContent_MakeAvailable(cli)
-# FetchContent_Populate(cli)
-# add_subdirectory(${cli_SOURCE_DIR} ${cli_BINARY_DIR})
-
 # find dependencies
 find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
-find_package(adapter-pkg REQUIRED)
+find_package(rclcpp REQUIRED)
 find_package(ui-pkg REQUIRED)
 
-add_executable(core src/main.cc
-                    src/server-core.cc)
-
-get_cmake_property(_variableNames VARIABLES)
-list (SORT _variableNames)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
-
-target_include_directories(core
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
-    $<INSTALL_INTERFACE:include>)
-ament_target_dependencies(core adapter-pkg ui-pkg)
+add_executable(core src/main.cc)
+ament_target_dependencies(core ui-pkg rclcpp)
 
 install(TARGETS
   core

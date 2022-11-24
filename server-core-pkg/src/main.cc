@@ -1,4 +1,4 @@
-#include "server-core-pkg/server-core.hh"
+#include "ui-pkg/consol-ui.hh"
 
 #include <memory>
 
@@ -7,9 +7,7 @@
 int main(int argc, char* argv[]) {
   rclcpp::init(argc, argv);
 
-  std::make_unique<
-      palette_server_api::lib::ros_foxy::server_core_pkg::ServerCore>()
-      ->Run();
+  std::make_unique<palette_server_ui::ConsolUI>()->Run();
 
   rclcpp::shutdown();
   return 0;
