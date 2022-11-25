@@ -23,6 +23,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(api-pkg REQUIRED)
+find_package(moveit_ros_planning_interface REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED  src/walking-platform-model-node.cc
                                     src/dobot-manipulator-model-node.cc)
@@ -31,10 +32,10 @@ target_include_directories(${PROJECT_NAME}
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
     $<INSTALL_INTERFACE:include>)
-ament_target_dependencies(${PROJECT_NAME} rclcpp api-pkg geometry_msgs)
+ament_target_dependencies(${PROJECT_NAME} rclcpp api-pkg geometry_msgs moveit_ros_planning_interface)
 
 ament_export_targets(${PROJECT_NAME} HAS_LIBRARY_TARGET)
-ament_export_dependencies(rclcpp api-pkg geometry_msgs)
+ament_export_dependencies(rclcpp api-pkg geometry_msgs moveit_ros_planning_interface)
 
 install(
   DIRECTORY inc/${PROJECT_NAME}

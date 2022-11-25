@@ -3,7 +3,9 @@
 
 #include "entity/interface/i-manipulator-model.hh"
 
-#include "rclcpp/rclcpp.hpp"
+#include <rclcpp/rclcpp.hpp>
+
+#include <moveit/move_group_interface/move_group_interface.h>
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
@@ -21,6 +23,9 @@ class DobotManipulatorModelNode : public rclcpp::Node,
 
  private:
   dto::Region workzone_;
+  rclcpp::Node::SharedPtr move_group_node_;
+  moveit::planning_interface::MoveGroupInterface move_group_;
+  std::vector<geometry_msgs::msg::Pose> waypoints_;
 };
 
 }  // namespace palette_server_api::lib::ros_foxy::adapter_pkg
