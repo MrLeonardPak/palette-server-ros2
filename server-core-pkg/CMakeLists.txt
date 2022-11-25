@@ -20,11 +20,15 @@ find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
-find_package(rclcpp REQUIRED)
 find_package(ui-pkg REQUIRED)
 
 add_executable(core src/main.cc)
-ament_target_dependencies(core ui-pkg rclcpp)
+ament_target_dependencies(core ui-pkg)
+
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}/
+)
 
 install(TARGETS
   core
