@@ -2,8 +2,8 @@ import os
 import yaml
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import ExecuteProcess
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 import xacro
 
@@ -47,17 +47,27 @@ def generate_launch_description():
     kinematics_yaml = load_yaml(
         'dobot_moveit_config', 'config/kinematics.yaml'
     )
+    use_sim_time = {
+        'use_sim_time': True
+    }
+
+    dobot = IncludeLaunchDescription(
+      PythonLaunchDescriptionSource([os.path.join(
+         get_package_share_directory('dobot_moveit_config'), 'launch'),
+         '/dobot_moveit.launch.py'])
+      )
 
     core = Node(
         name="core",
         package="server-core-pkg",
         executable="core",
         output="screen",
-        parameters=[robot_description, robot_description_semantic, kinematics_yaml],
+        parameters=[robot_description, robot_description_semantic, kinematics_yaml, use_sim_time],
         emulate_tty=True,
         prefix="xterm -e"
     )
 
     return LaunchDescription([
+        dobot,
         core
     ])
