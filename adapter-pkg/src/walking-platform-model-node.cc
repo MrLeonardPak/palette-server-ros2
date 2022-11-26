@@ -3,8 +3,6 @@
 #include <chrono>
 #include <functional>
 
-#include "extra-constants.hh"
-
 using namespace std::chrono_literals;
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {

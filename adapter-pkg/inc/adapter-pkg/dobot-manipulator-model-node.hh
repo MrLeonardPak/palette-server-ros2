@@ -15,10 +15,8 @@ class DobotManipulatorModelNode : public rclcpp::Node,
   DobotManipulatorModelNode(std::string_view node_name, dto::Region workzone);
   ~DobotManipulatorModelNode() = default;
 
-  void SetPoseValue(dto::Pose pose) override;
-  void SetPoseSpeed(float speed) override;
-  void SetJointValue(int joint_num, float value) override;
-  void SetJointSpeed(int joint_num, float speed) override;
+  void MoveTo(dto::Pose pose) override;
+  void set_move_speed(float speed) override;
   dto::Region get_workzone() const override;
 
  private:
@@ -26,6 +24,7 @@ class DobotManipulatorModelNode : public rclcpp::Node,
   rclcpp::Node::SharedPtr move_group_node_;
   moveit::planning_interface::MoveGroupInterface move_group_;
   std::vector<geometry_msgs::msg::Pose> waypoints_;
+  float move_speed_;
 };
 
 }  // namespace palette_server_api::lib::ros_foxy::adapter_pkg

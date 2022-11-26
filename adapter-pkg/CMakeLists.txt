@@ -25,9 +25,10 @@ find_package(geometry_msgs REQUIRED)
 find_package(api-pkg REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 
-add_library(${PROJECT_NAME} SHARED  src/walking-platform-model-node.cc
+add_library(${PROJECT_NAME} STATIC  src/walking-platform-model-node.cc
                                     src/dobot-manipulator-model-node.cc)
 
+add_compile_options(-fPIC)
 target_include_directories(${PROJECT_NAME}
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
