@@ -47,7 +47,7 @@ void DobotManipulatorModelNode::MoveTo(dto::Pose pose) {
     // Thrid create a IterativeParabolicTimeParameterization object
     trajectory_processing::IterativeParabolicTimeParameterization iptp;
     // Fourth compute computeTimeStamps
-    bool success = iptp.computeTimeStamps(rt);
+    bool success = iptp.computeTimeStamps(rt, move_speed_);
     if (success) {
       RCLCPP_INFO(get_logger(), "Computed time stamp SUCCESS");
     } else {
