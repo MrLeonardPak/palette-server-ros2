@@ -28,7 +28,7 @@ find_package(moveit_ros_planning_interface REQUIRED)
 add_library(${PROJECT_NAME} STATIC  src/walking-platform-model-node.cc
                                     src/dobot-manipulator-model-node.cc)
 
-add_compile_options(-fPIC)
+target_compile_options(${PROJECT_NAME} PRIVATE -fPIC)
 target_include_directories(${PROJECT_NAME}
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>

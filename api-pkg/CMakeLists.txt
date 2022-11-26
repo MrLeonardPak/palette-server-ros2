@@ -25,6 +25,7 @@ set(SOURCES api/src/entity/network-entity.cc
             api/src/use-case/auto-control-uc.cc)
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
+target_compile_options(${PROJECT_NAME} PRIVATE -fPIC)
 target_include_directories(${PROJECT_NAME}
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/api/inc>
