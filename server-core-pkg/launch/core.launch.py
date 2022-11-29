@@ -2,8 +2,10 @@ import os
 import yaml
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration, PythonExpression
+from launch.conditions import IfCondition
 from ament_index_python.packages import get_package_share_directory
 import xacro
 
@@ -27,6 +29,20 @@ def load_file(package_name, file_path):
         return None
 
 def generate_launch_description():
+    usePlatformParamName = 'use_platform'
+    usePlatformParam = LaunchConfiguration(usePlatformParamName)
+    usePlatformParamLaunchArg = DeclareLaunchArgument(
+        usePlatformParamName,
+        default_value='False'
+    )
+
+    useDobotParamName = 'use_dobot'
+    useDobotParam = LaunchConfiguration(useDobotParamName)
+    useDobotParamLaunchArg = DeclareLaunchArgument(
+        useDobotParamName,
+        default_value='False'
+    )
+
     robot_description_config = xacro.process_file(
         os.path.join(
             get_package_share_directory("dobot_description"),
@@ -54,8 +70,29 @@ def generate_launch_description():
     dobot = IncludeLaunchDescription(
       PythonLaunchDescriptionSource([os.path.join(
          get_package_share_directory('dobot_moveit_config'), 'launch'),
-         '/dobot_moveit.launch.py'])
-      )
+         '/dobot_moveit.launch.py']), 
+         condition=IfCondition(PythonExpression([
+                useDobotParam,
+                ' and ',
+                ' not ',
+                usePlatformParam
+            ]))
+    )
+
+    platform = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('simulation'), 'launch'),
+            '/palitra_dobot_sim.launch.py']),
+            launch_arguments={
+                'use_platform': 'true',
+            }.items(),
+            condition=IfCondition(PythonExpression([
+                usePlatformParam,
+                ' and ',
+                ' not ',
+                useDobotParam
+            ]))
+    )
 
     core = Node(
         name="core",
@@ -68,6 +105,9 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        usePlatformParamLaunchArg,
+        useDobotParamLaunchArg,
         dobot,
+        platform,
         core
     ])
