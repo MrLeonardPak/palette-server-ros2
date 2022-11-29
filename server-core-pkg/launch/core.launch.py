@@ -71,6 +71,9 @@ def generate_launch_description():
       PythonLaunchDescriptionSource([os.path.join(
          get_package_share_directory('dobot_moveit_config'), 'launch'),
          '/dobot_moveit.launch.py']), 
+         launch_arguments={
+                'robot_ip': '192.168.1.6',
+            }.items(),
          condition=IfCondition(PythonExpression([
                 useDobotParam,
                 ' and ',
