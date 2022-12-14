@@ -1,11 +1,6 @@
-#ifndef PALETTE_SERVER_API_LIB_ROS_FOXY_ADAPTER_PKG_SUPPORTING_HH
-#define PALETTE_SERVER_API_LIB_ROS_FOXY_ADAPTER_PKG_SUPPORTING_HH
+#include "adapter-pkg/adapter.hh"
 
-#include <geometry_msgs/msg/pose.hpp>
-
-#include "dto/pose.hh"
-
-namespace palette_server_api::lib::ros_foxy::adapter_pkg::supporting {
+namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
 geometry_msgs::msg::Pose RosPoseCast(dto::Pose const& dto_pose) noexcept {
   auto ros_pose = geometry_msgs::msg::Pose();
@@ -19,6 +14,4 @@ geometry_msgs::msg::Pose RosPoseCast(dto::Pose const& dto_pose) noexcept {
   return ros_pose;
 }
 
-}  // namespace palette_server_api::lib::ros_foxy::adapter_pkg::supporting
-
-#endif  // PALETTE_SERVER_API_LIB_ROS_FOXY_ADAPTER_PKG_SUPPORTING_HH
+}  // namespace palette_server_api::lib::ros_foxy::adapter_pkg

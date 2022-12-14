@@ -25,8 +25,10 @@ find_package(geometry_msgs REQUIRED)
 find_package(api-pkg REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 
-add_library(${PROJECT_NAME} STATIC  src/walking-platform-model-node.cc
-                                    src/dobot-manipulator-model-node.cc)
+add_library(${PROJECT_NAME} STATIC  src/adapter.cc
+                                    src/walking-platform-model-node.cc
+                                    src/dobot-manipulator-model-node.cc
+                                    src/painter-model-node.cc)
 
 target_compile_options(${PROJECT_NAME} PRIVATE -fPIC)
 target_include_directories(${PROJECT_NAME}

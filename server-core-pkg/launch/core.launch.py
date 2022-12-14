@@ -98,7 +98,7 @@ def generate_launch_description():
     )
 
     core = Node(
-        name="core",
+        # name="core",
         package="server-core-pkg",
         executable="core",
         output="screen",

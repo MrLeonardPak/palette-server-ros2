@@ -4,16 +4,16 @@
 
 #include <moveit/trajectory_processing/iterative_time_parameterization.h>
 
-#include "supporting.hh"
+// #include "adapter-pkg/adapter.hh"
 
 using namespace std::chrono_literals;
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
-DobotManipulatorModelNode::DobotManipulatorModelNode(std::string_view node_name,
+DobotManipulatorModelNode::DobotManipulatorModelNode(std::string node_name,
                                                      dto::Region workzone)
-    : Node(
-          node_name.data(),
+    : IManipulatorNode(
+          std::move(node_name),
           rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(
               true)),
       workzone_(workzone),
@@ -26,7 +26,7 @@ DobotManipulatorModelNode::DobotManipulatorModelNode(std::string_view node_name,
 
 void DobotManipulatorModelNode::MoveTo(dto::Pose pose) {
   // TODO: Code here
-  auto target_pose = supporting::RosPoseCast(std::move(pose));
+  auto target_pose = RosPoseCast(std::move(pose));
   waypoints_.push_back(target_pose);
 
   moveit_msgs::msg::RobotTrajectory trajectory;

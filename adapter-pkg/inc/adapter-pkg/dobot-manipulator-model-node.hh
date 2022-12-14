@@ -1,18 +1,16 @@
 #ifndef PALETTE_SERVER_API_LIB_ROS_FOXY_ADAPTER_PKG_DOBOT_MANIPULATOR_MODEL_NODE_HH
 #define PALETTE_SERVER_API_LIB_ROS_FOXY_ADAPTER_PKG_DOBOT_MANIPULATOR_MODEL_NODE_HH
 
-#include "entity/interface/i-manipulator-model.hh"
-
+#include <moveit/move_group_interface/move_group_interface.h>
 #include <rclcpp/rclcpp.hpp>
 
-#include <moveit/move_group_interface/move_group_interface.h>
+#include "adapter-pkg/adapter.hh"
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
-class DobotManipulatorModelNode : public rclcpp::Node,
-                                  public entity::IManipulatorModel {
+class DobotManipulatorModelNode : public IManipulatorNode {
  public:
-  DobotManipulatorModelNode(std::string_view node_name, dto::Region workzone);
+  DobotManipulatorModelNode(std::string node_name, dto::Region workzone);
   ~DobotManipulatorModelNode() = default;
 
   void MoveTo(dto::Pose pose) override;
