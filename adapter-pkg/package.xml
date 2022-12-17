@@ -13,6 +13,7 @@
   <depend>api-pkg</depend>
   <depend>geometry_msgs</depend>
   <depend>moveit_ros_planning_interface</depend>
+  <depend>platform_msg</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

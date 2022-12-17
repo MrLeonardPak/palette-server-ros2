@@ -24,6 +24,7 @@ find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(api-pkg REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
+find_package(platform_msg REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC  src/adapter.cc
                                     src/walking-platform-model-node.cc
@@ -35,10 +36,10 @@ target_include_directories(${PROJECT_NAME}
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/inc>
     $<INSTALL_INTERFACE:include>)
-ament_target_dependencies(${PROJECT_NAME} rclcpp api-pkg geometry_msgs moveit_ros_planning_interface)
+ament_target_dependencies(${PROJECT_NAME} rclcpp api-pkg geometry_msgs moveit_ros_planning_interface platform_msg)
 
 ament_export_targets(${PROJECT_NAME} HAS_LIBRARY_TARGET)
-ament_export_dependencies(rclcpp api-pkg geometry_msgs moveit_ros_planning_interface)
+ament_export_dependencies(rclcpp api-pkg geometry_msgs moveit_ros_planning_interface platform_msg)
 
 install(
   DIRECTORY inc/${PROJECT_NAME}

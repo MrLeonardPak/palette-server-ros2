@@ -7,6 +7,7 @@
 #include <rclcpp/rclcpp.hpp>
 
 #include "adapter-pkg/adapter.hh"
+#include "platform_msg/msg/cmd_linear.hpp"
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
@@ -26,9 +27,9 @@ class WalkingPlatformModelNode : public IPlatformNode {
   dto::Region get_workzone() const override;
 
  private:
-  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher_;
+  rclcpp::Publisher<platform_msg::msg::CmdLinear>::SharedPtr publisher_;
 
-  geometry_msgs::msg::Twist msg_;
+  // geometry_msgs::msg::Twist msg_;
   dto::Region workzone_;
   float linear_speed_;
   float angular_speed_;

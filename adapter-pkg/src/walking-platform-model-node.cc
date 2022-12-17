@@ -12,11 +12,16 @@ WalkingPlatformModelNode::WalkingPlatformModelNode(std::string node_name,
                                                    dto::Region workzone)
     : IPlatformNode(std::move(node_name)), workzone_(workzone) {
   publisher_ =
-      create_publisher<geometry_msgs::msg::Twist>(std::move(topic_name), 10);
+      create_publisher<platform_msg::msg::CmdLinear>(std::move(topic_name), 10);
 }
 
 void WalkingPlatformModelNode::ShiftY(float shift) {
   // TODO отправить сообщение в топик для управления платформой
+  auto message = platform_msg::msg::CmdLinear();
+  // FIXME убрать ограничение
+  message.step = std::min(shift, 0.35f);
+  message.vel = std::min(linear_speed_, 0.15f);
+  publisher_->publish(message);
   RCLCPP_INFO(get_logger(), "Set platform shift: %.2f", shift);
 }
 

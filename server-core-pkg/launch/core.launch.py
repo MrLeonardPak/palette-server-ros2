@@ -33,14 +33,14 @@ def generate_launch_description():
     usePlatformParam = LaunchConfiguration(usePlatformParamName)
     usePlatformParamLaunchArg = DeclareLaunchArgument(
         usePlatformParamName,
-        default_value='False'
+        default_value='True'
     )
 
     useDobotParamName = 'use_dobot'
     useDobotParam = LaunchConfiguration(useDobotParamName)
     useDobotParamLaunchArg = DeclareLaunchArgument(
         useDobotParamName,
-        default_value='False'
+        default_value='True'
     )
 
     robot_description_config = xacro.process_file(
@@ -73,27 +73,22 @@ def generate_launch_description():
          '/dobot_moveit.launch.py']), 
          launch_arguments={
                 'robot_ip': '192.168.1.6',
+                'use_fake_hardware': 'true',
             }.items(),
          condition=IfCondition(PythonExpression([
-                useDobotParam,
-                ' and ',
-                ' not ',
-                usePlatformParam
+                useDobotParam
             ]))
     )
 
     platform = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('simulation'), 'launch'),
-            '/palitra_dobot_sim.launch.py']),
+            get_package_share_directory('platform_bringup')),
+            '/platform_bringup.launch.py']),
             launch_arguments={
-                'use_platform': 'true',
+                'use_fake': 'true',
             }.items(),
             condition=IfCondition(PythonExpression([
                 usePlatformParam,
-                ' and ',
-                ' not ',
-                useDobotParam
             ]))
     )
 
