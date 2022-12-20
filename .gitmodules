@@ -1,7 +1,7 @@
 [submodule "models-pkg"]
 	path = models-pkg
 	url = git@github.com:ArtemVinokurov/palitra_ros2.git
-	branch = main
+	branch = dev
 [submodule "api-pkg/api"]
 	path = api-pkg/api
 	url = git@github.com:MrLeonardPak/palette-server-api.git
