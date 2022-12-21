@@ -73,7 +73,7 @@ def generate_launch_description():
          '/dobot_moveit.launch.py']), 
          launch_arguments={
                 'robot_ip': '192.168.1.6',
-                'use_fake_hardware': 'true',
+                'use_fake_hardware': 'True',
             }.items(),
          condition=IfCondition(PythonExpression([
                 useDobotParam
@@ -85,7 +85,7 @@ def generate_launch_description():
             get_package_share_directory('platform_bringup')),
             '/platform_bringup.launch.py']),
             launch_arguments={
-                'use_fake': 'true',
+                'use_fake': 'True',
             }.items(),
             condition=IfCondition(PythonExpression([
                 usePlatformParam,

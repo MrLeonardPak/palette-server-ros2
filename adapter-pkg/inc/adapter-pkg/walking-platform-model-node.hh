@@ -8,13 +8,15 @@
 
 #include "adapter-pkg/adapter.hh"
 #include "platform_msg/msg/cmd_linear.hpp"
+#include "platform_msg/msg/cmd_rot.hpp"
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
 class WalkingPlatformModelNode : public IPlatformNode {
  public:
   WalkingPlatformModelNode(std::string node_name,
-                           std::string topic_name,
+                           std::string linear_topic_name,
+                           std::string rotate_topic_name,
                            dto::Region workzone);
   ~WalkingPlatformModelNode() = default;
 
@@ -27,7 +29,8 @@ class WalkingPlatformModelNode : public IPlatformNode {
   dto::Region get_workzone() const override;
 
  private:
-  rclcpp::Publisher<platform_msg::msg::CmdLinear>::SharedPtr publisher_;
+  rclcpp::Publisher<platform_msg::msg::CmdLinear>::SharedPtr linear_publisher_;
+  rclcpp::Publisher<platform_msg::msg::CmdRot>::SharedPtr rotate_publisher_;
 
   // geometry_msgs::msg::Twist msg_;
   dto::Region workzone_;

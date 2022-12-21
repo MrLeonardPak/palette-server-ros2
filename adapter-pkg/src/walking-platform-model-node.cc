@@ -7,12 +7,16 @@ using namespace std::chrono_literals;
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
-WalkingPlatformModelNode::WalkingPlatformModelNode(std::string node_name,
-                                                   std::string topic_name,
-                                                   dto::Region workzone)
+WalkingPlatformModelNode::WalkingPlatformModelNode(
+    std::string node_name,
+    std::string linear_topic_name,
+    std::string rotate_topic_name,
+    dto::Region workzone)
     : IPlatformNode(std::move(node_name)), workzone_(workzone) {
-  publisher_ =
-      create_publisher<platform_msg::msg::CmdLinear>(std::move(topic_name), 10);
+  linear_publisher_ = create_publisher<platform_msg::msg::CmdLinear>(
+      std::move(linear_topic_name), 10);
+  rotate_publisher_ = create_publisher<platform_msg::msg::CmdRot>(
+      std::move(rotate_topic_name), 10);
 }
 
 void WalkingPlatformModelNode::ShiftY(float shift) {
@@ -21,7 +25,7 @@ void WalkingPlatformModelNode::ShiftY(float shift) {
   // FIXME убрать ограничение
   message.step = std::min(shift, 0.35f);
   message.vel = std::min(linear_speed_, 0.15f);
-  publisher_->publish(message);
+  linear_publisher_->publish(message);
   RCLCPP_INFO(get_logger(), "Set platform shift: %.2f", shift);
 }
 
