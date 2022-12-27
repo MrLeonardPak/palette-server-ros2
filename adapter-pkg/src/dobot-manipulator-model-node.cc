@@ -107,4 +107,25 @@ dto::Region DobotManipulatorModelNode::get_workzone() const {
   return workzone_;
 }
 
+// Moveit go to home position
+void DobotManipulatorModelNode::GoHome() {
+  move_group_.setNamedTarget("home");
+  move_group_.setMaxVelocityScalingFactor(move_speed_);
+  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+
+  bool success = (move_group_.plan(my_plan) ==
+                  moveit::planning_interface::MoveItErrorCode::SUCCESS);
+
+  if (success) {
+    RCLCPP_INFO(get_logger(), "Pose goal SUCCESS");
+  } else {
+    // Исключение, если нет пути
+    std::stringstream ss;
+    ss << "No PATH to home!" << std::endl;
+    throw std::runtime_error(ss.str());
+  }
+
+  move_group_.move();
+}
+
 }  // namespace palette_server_api::lib::ros_foxy::adapter_pkg

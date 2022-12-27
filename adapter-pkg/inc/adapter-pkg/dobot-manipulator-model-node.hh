@@ -16,6 +16,7 @@ class DobotManipulatorModelNode : public IManipulatorNode {
   void MoveTo(dto::Pose pose) override;
   void set_move_speed(float speed) override;
   dto::Region get_workzone() const override;
+  void GoHome() override;
 
  private:
   dto::Region workzone_;

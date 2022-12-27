@@ -36,6 +36,10 @@ void WalkingPlatformModelNode::ShiftX(float shift) {
 
 // HACK: Метод Rotate должен принимать угол, а не скорость
 void WalkingPlatformModelNode::Rotate(float angle) {
+  auto message = platform_msg::msg::CmdRot();
+  message.vel = std::min(angular_speed_, 0.15f);
+  message.step = angle;
+  rotate_publisher_->publish(message);
   // TODO отправить сообщение в топик для управления платформой
   RCLCPP_INFO(get_logger(), "Rotate platform on: %.2f", angle);
 }
