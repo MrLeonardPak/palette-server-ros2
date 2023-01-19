@@ -72,25 +72,25 @@ def generate_launch_description():
          get_package_share_directory('dobot_moveit_config'), 'launch'),
          '/dobot_moveit.launch.py']), 
          launch_arguments={
-                'robot_ip': '192.168.1.6',
-                'use_fake_hardware': 'True',
+                'robot_ip': '192.168.5.1',
+                # 'use_fake_hardware': 'True',
             }.items(),
          condition=IfCondition(PythonExpression([
                 useDobotParam
             ]))
     )
 
-    platform = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('platform_bringup')),
-            '/platform_bringup.launch.py']),
-            launch_arguments={
-                'use_fake': 'True',
-            }.items(),
-            condition=IfCondition(PythonExpression([
-                usePlatformParam,
-            ]))
-    )
+    # platform = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([os.path.join(
+    #         get_package_share_directory('platform_bringup')),
+    #         '/platform_bringup.launch.py']),
+    #         launch_arguments={
+    #             'use_fake': 'True',
+    #         }.items(),
+    #         condition=IfCondition(PythonExpression([
+    #             usePlatformParam,
+    #         ]))
+    # )
 
     core = Node(
         # name="core",
@@ -106,6 +106,6 @@ def generate_launch_description():
         usePlatformParamLaunchArg,
         useDobotParamLaunchArg,
         dobot,
-        platform,
+        # platform,
         core
     ])
