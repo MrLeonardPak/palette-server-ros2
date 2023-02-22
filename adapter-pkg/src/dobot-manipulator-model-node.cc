@@ -1,30 +1,19 @@
 #include "adapter-pkg/dobot-manipulator-model-node.hh"
 
-#include <chrono>
-
 #include <moveit/trajectory_processing/iterative_time_parameterization.h>
 
-// #include "adapter-pkg/adapter.hh"
-
-using namespace std::chrono_literals;
+#include "adapter-pkg/adapter.hh"
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
-DobotManipulatorModelNode::DobotManipulatorModelNode(std::string node_name,
-                                                     dto::Region workzone)
-    : IManipulatorNode(
-          std::move(node_name),
-          rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(
-              true)),
-      workzone_(workzone),
-      move_group_node_(rclcpp::Node::make_shared(
-          "move_group_interface_tutorial",
-          rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(
-              true))),
-      move_group_(move_group_node_, "dobot_arm"),
-      move_speed_(0.0) {}
+DobotManipulatorModelNode::DobotManipulatorModelNode(
+    std::string node_name,
+    dto::props::Manipulator props)
+    : node_(rclcpp::Node::make_shared(node_name)),
+      props_(props),
+      move_group_(node_, "dobot_arm") {}
 
-void DobotManipulatorModelNode::MoveTo(dto::Pose pose) {
+void DobotManipulatorModelNode::GoTo(dto::Pose pose) {
   // TODO: Code here
   auto target_pose = RosPoseCast(std::move(pose));
   waypoints_.push_back(target_pose);
@@ -47,9 +36,9 @@ void DobotManipulatorModelNode::MoveTo(dto::Pose pose) {
     // Thrid create a IterativeParabolicTimeParameterization object
     trajectory_processing::IterativeParabolicTimeParameterization iptp;
     // Fourth compute computeTimeStamps
-    bool success = iptp.computeTimeStamps(rt, move_speed_);
+    bool success = iptp.computeTimeStamps(rt, move_speed_ / props_.max_speed);
     if (success) {
-      RCLCPP_INFO(get_logger(), "Computed time stamp SUCCESS");
+      RCLCPP_INFO(node_->get_logger(), "Computed time stamp SUCCESS");
     } else {
       // Исключение, если нет что то не так с параметризацией
       throw std::runtime_error("Time Parameterization Fail!");
@@ -60,19 +49,19 @@ void DobotManipulatorModelNode::MoveTo(dto::Pose pose) {
     moveit::planning_interface::MoveGroupInterface::Plan my_plan;
     my_plan.trajectory_ = trajectory;
 
-    RCLCPP_INFO(get_logger(), "Cartesian path SUCCESS (%.2f%% acheived)",
+    RCLCPP_INFO(node_->get_logger(), "Cartesian path SUCCESS (%.2f%% acheived)",
                 fraction * 100.0);
     move_group_.execute(my_plan);
   } else {
     move_group_.setPoseTarget(target_pose);
-    move_group_.setMaxVelocityScalingFactor(move_speed_);
+    move_group_.setMaxVelocityScalingFactor(move_speed_ / props_.max_speed);
     moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
     bool success = (move_group_.plan(my_plan) ==
                     moveit::planning_interface::MoveItErrorCode::SUCCESS);
 
     if (success) {
-      RCLCPP_INFO(get_logger(), "Pose goal SUCCESS");
+      RCLCPP_INFO(node_->get_logger(), "Pose goal SUCCESS");
     } else {
       // Исключение, если нет пути
       std::stringstream ss;
@@ -90,34 +79,28 @@ void DobotManipulatorModelNode::MoveTo(dto::Pose pose) {
   move_group_.clearPoseTargets();
 
   RCLCPP_INFO(
-      get_logger(), "Set Pose Value: point: x-'%.2f' y-'%.2f' z-'%.2f' ",
+      node_->get_logger(), "Set Pose Value: point: x-'%.2f' y-'%.2f' z-'%.2f' ",
       // "orient: x-'%.2f' y-'%.2f' z-'%.2f' w-'%.2f'",
       target_pose.position.x, target_pose.position.y, target_pose.position.z,
       target_pose.orientation.x, target_pose.orientation.y,
       target_pose.orientation.z, target_pose.orientation.w);
 }
 
-void DobotManipulatorModelNode::set_move_speed(float speed) {
-  // TODO: Code here
+void DobotManipulatorModelNode::set_eef_speed(float speed) {
   move_speed_ = speed;
-  RCLCPP_INFO(get_logger(), "Set Pose Speed: %.2f", speed);
+  RCLCPP_INFO(node_->get_logger(), "Set Pose Speed: %.2f", speed);
 }
 
-dto::Region DobotManipulatorModelNode::get_workzone() const {
-  return workzone_;
-}
-
-// Moveit go to home position
-void DobotManipulatorModelNode::GoHome() {
-  move_group_.setNamedTarget("home");
-  move_group_.setMaxVelocityScalingFactor(move_speed_);
+void DobotManipulatorModelNode::GoTo(std::string const& pose_name) {
+  move_group_.setNamedTarget(pose_name);
+  move_group_.setMaxVelocityScalingFactor(move_speed_ / props_.max_speed);
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
   bool success = (move_group_.plan(my_plan) ==
                   moveit::planning_interface::MoveItErrorCode::SUCCESS);
 
   if (success) {
-    RCLCPP_INFO(get_logger(), "Pose goal SUCCESS");
+    RCLCPP_INFO(node_->get_logger(), "Pose goal SUCCESS");
   } else {
     // Исключение, если нет пути
     std::stringstream ss;
@@ -126,6 +109,10 @@ void DobotManipulatorModelNode::GoHome() {
   }
 
   move_group_.move();
+}
+
+dto::props::Manipulator DobotManipulatorModelNode::get_props() const {
+  return props_;
 }
 
 }  // namespace palette_server_api::lib::ros_foxy::adapter_pkg

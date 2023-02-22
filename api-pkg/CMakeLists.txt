@@ -21,8 +21,8 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-set(SOURCES api/src/entity/network-entity.cc
-            api/src/use-case/auto-control-uc.cc)
+set(SOURCES api/src/use-case/auto-control-uc.cc
+            api/src/use-case/manual-control-uc.cc)
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 target_compile_options(${PROJECT_NAME} PRIVATE -fPIC)

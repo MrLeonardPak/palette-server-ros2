@@ -3,26 +3,22 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-#include "adapter-pkg/adapter.hh"
-
-#include "dto/prop-tree.hh"
+#include "entity/interface/i-equipment-model.hh"
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
-class PainterModelNode : public IEquipmentNode {
+class PainterModelNode : public entity::IEquipmentModel {
  public:
-  PainterModelNode(std::string node_name, dto::Region workzone);
+  PainterModelNode(std::string const& node_name, dto::props::Equipment props);
   ~PainterModelNode() = default;
 
   void Enable() override;
   void Disable() override;
-  void SetParams(dto::PropTree&& params) override;
-  float CalcRecommendSpeed() const override;
-  dto::Region get_workzone() const override;
+  dto::props::Equipment get_props() const override;
 
  private:
-  dto::Region workzone_;
-  dto::PropTree params_;
+  rclcpp::Node::SharedPtr node_;
+  dto::props::Equipment props_;
 };
 
 }  // namespace palette_server_api::lib::ros_foxy::adapter_pkg

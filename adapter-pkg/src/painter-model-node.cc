@@ -2,29 +2,22 @@
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
-PainterModelNode::PainterModelNode(std::string node_name, dto::Region workzone)
-    : IEquipmentNode(std::move(node_name)), workzone_(workzone) {}
+PainterModelNode::PainterModelNode(std::string const& node_name,
+                                   dto::props::Equipment props)
+    : node_(rclcpp::Node::make_shared(node_name)), props_(props) {}
 
 void PainterModelNode::Enable() {
   // TODO: Code here
-  RCLCPP_INFO(this->get_logger(), "Enable call");
+  RCLCPP_INFO(node_->get_logger(), "Enable call");
 }
 
 void PainterModelNode::Disable() {
   // TODO: Code here
-  RCLCPP_INFO(this->get_logger(), "Disable call");
+  RCLCPP_INFO(node_->get_logger(), "Disable call");
 }
 
-void PainterModelNode::SetParams(dto::PropTree&& params) {
-  params_ = params;
-}
-
-float PainterModelNode::CalcRecommendSpeed() const {
-  return 0.6;
-}
-
-dto::Region PainterModelNode::get_workzone() const {
-  return workzone_;
+dto::props::Equipment PainterModelNode::get_props() const {
+  return props_;
 }
 
 }  // namespace palette_server_api::lib::ros_foxy::adapter_pkg

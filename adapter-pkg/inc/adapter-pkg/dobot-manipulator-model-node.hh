@@ -4,26 +4,27 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <rclcpp/rclcpp.hpp>
 
-#include "adapter-pkg/adapter.hh"
+#include "entity/interface/i-manipulator-model.hh"
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
-class DobotManipulatorModelNode : public IManipulatorNode {
+class DobotManipulatorModelNode : public entity::IManipulatorModel {
  public:
-  DobotManipulatorModelNode(std::string node_name, dto::Region workzone);
+  DobotManipulatorModelNode(std::string node_name,
+                            dto::props::Manipulator props);
   ~DobotManipulatorModelNode() = default;
 
-  void MoveTo(dto::Pose pose) override;
-  void set_move_speed(float speed) override;
-  dto::Region get_workzone() const override;
-  void GoHome() override;
+  void GoTo(dto::Pose pose) override;
+  void GoTo(std::string const& pose_name) override;
+  void set_eef_speed(float speed) override;
+  dto::props::Manipulator get_props() const override;
 
  private:
-  dto::Region workzone_;
-  rclcpp::Node::SharedPtr move_group_node_;
+  rclcpp::Node::SharedPtr node_;
+  dto::props::Manipulator props_;
   moveit::planning_interface::MoveGroupInterface move_group_;
   std::vector<geometry_msgs::msg::Pose> waypoints_;
-  float move_speed_;
+  float move_speed_ = 0.0f;
 };
 
 }  // namespace palette_server_api::lib::ros_foxy::adapter_pkg
