@@ -3,8 +3,11 @@
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
 PainterModelNode::PainterModelNode(std::string const& node_name,
+                                   rclcpp::Executor::SharedPtr executor,
                                    dto::props::Equipment props)
-    : node_(rclcpp::Node::make_shared(node_name)), props_(props) {}
+    : node_(rclcpp::Node::make_shared(node_name)),
+      executor_(executor),
+      props_(props) {}
 
 void PainterModelNode::Enable() {
   // TODO: Code here

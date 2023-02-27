@@ -29,7 +29,8 @@ find_package(platform_msg REQUIRED)
 add_library(${PROJECT_NAME} STATIC  src/adapter.cc
                                     src/walking-platform-model-node.cc
                                     src/dobot-manipulator-model-node.cc
-                                    src/painter-model-node.cc)
+                                    src/painter-model-node.cc
+                                    src/params-db.cc)
 
 target_compile_options(${PROJECT_NAME} PRIVATE -fPIC)
 target_include_directories(${PROJECT_NAME}

@@ -9,15 +9,20 @@ namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
 class PainterModelNode : public entity::IEquipmentModel {
  public:
-  PainterModelNode(std::string const& node_name, dto::props::Equipment props);
+  PainterModelNode(std::string const& node_name,
+                   rclcpp::Executor::SharedPtr executor,
+                   dto::props::Equipment props);
   ~PainterModelNode() = default;
 
   void Enable() override;
   void Disable() override;
   dto::props::Equipment get_props() const override;
 
+  void Start() { executor_->add_node(node_); }
+
  private:
   rclcpp::Node::SharedPtr node_;
+  rclcpp::Executor::SharedPtr executor_;
   dto::props::Equipment props_;
 };
 

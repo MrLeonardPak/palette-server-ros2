@@ -15,6 +15,7 @@ namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 class WalkingPlatformModelNode : public entity::IPlatformModel {
  public:
   WalkingPlatformModelNode(std::string const& node_name,
+                           rclcpp::Executor::SharedPtr executor,
                            std::string const& linear_topic_name,
                            std::string const& rotate_topic_name,
                            dto::props::Platform props);
@@ -28,8 +29,11 @@ class WalkingPlatformModelNode : public entity::IPlatformModel {
   void set_ang_vel(float) override;
   dto::props::Platform get_props() const override;
 
+  void Start() { executor_->add_node(node_); }
+
  private:
   rclcpp::Node::SharedPtr node_;
+  rclcpp::Executor::SharedPtr executor_;
   rclcpp::Publisher<platform_msg::msg::CmdLinear>::SharedPtr linear_publisher_;
   rclcpp::Publisher<platform_msg::msg::CmdRot>::SharedPtr rotate_publisher_;
   dto::props::Platform props_;

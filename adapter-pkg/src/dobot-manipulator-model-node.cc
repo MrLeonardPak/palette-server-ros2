@@ -8,8 +8,10 @@ namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
 DobotManipulatorModelNode::DobotManipulatorModelNode(
     std::string node_name,
+    rclcpp::Executor::SharedPtr executor,
     dto::props::Manipulator props)
     : node_(rclcpp::Node::make_shared(node_name)),
+      executor_(executor),
       props_(props),
       move_group_(node_, "dobot_arm") {}
 
