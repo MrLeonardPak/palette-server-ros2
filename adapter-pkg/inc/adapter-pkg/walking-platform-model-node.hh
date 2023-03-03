@@ -6,16 +6,18 @@
 #include <geometry_msgs/msg/twist.hpp>
 #include <rclcpp/rclcpp.hpp>
 
+#include "adapter-pkg/adapter.hh"
 #include "entity/interface/i-platform-model.hh"
 #include "platform_msg/msg/cmd_linear.hpp"
 #include "platform_msg/msg/cmd_rot.hpp"
 
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
-class WalkingPlatformModelNode : public entity::IPlatformModel {
+class WalkingPlatformModelNode : public MiniNode,
+                                 public entity::IPlatformModel {
  public:
-  WalkingPlatformModelNode(std::string const& node_name,
-                           rclcpp::Executor::SharedPtr executor,
+  WalkingPlatformModelNode(rclcpp::Executor::SharedPtr executor,
+                           std::string const& node_name,
                            std::string const& linear_topic_name,
                            std::string const& rotate_topic_name,
                            dto::props::Platform props);
@@ -29,11 +31,7 @@ class WalkingPlatformModelNode : public entity::IPlatformModel {
   void set_ang_vel(float) override;
   dto::props::Platform get_props() const override;
 
-  void Start() { executor_->add_node(node_); }
-
  private:
-  rclcpp::Node::SharedPtr node_;
-  rclcpp::Executor::SharedPtr executor_;
   rclcpp::Publisher<platform_msg::msg::CmdLinear>::SharedPtr linear_publisher_;
   rclcpp::Publisher<platform_msg::msg::CmdRot>::SharedPtr rotate_publisher_;
   dto::props::Platform props_;

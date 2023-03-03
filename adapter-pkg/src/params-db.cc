@@ -17,12 +17,12 @@ std::unique_ptr<dto::Robot> ParamDB::GetRobot(int id) {
       dto::props::Robot{
           id, {0.65, 0.0, 0.1}, dto::Region2D{{{0.0, 0.0}, {0.0, 0.0}}}},
       std::make_unique<WalkingPlatformModelNode>(
-          "walking_platform", executor_, "cmd_linear", "cmd_rotate",
+          executor_, "walking_platform", "cmd_linear", "cmd_rotate",
           dto::props::Platform{1.0, dto::Region2D{{{0.0, 0.0}, {1.0, 1.7}}}}),
-      std::make_unique<DobotManipulatorModelNode>("dobot", executor_,
+      std::make_unique<DobotManipulatorModelNode>(executor_, "dobot",
                                                   dto::props::Manipulator{1.0}),
       std::make_unique<PainterModelNode>(
-          "painter", executor_,
+          executor_, "painter",
           dto::props::Equipment{1.0, dto::Region2D{{{0.0, 0.0}, {0.1, 0.1}}}}));
   return robot;
 }

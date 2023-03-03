@@ -4,14 +4,12 @@
 namespace palette_server_api::lib::ros_foxy::adapter_pkg {
 
 WalkingPlatformModelNode::WalkingPlatformModelNode(
-    std::string const& node_name,
     rclcpp::Executor::SharedPtr executor,
+    std::string const& node_name,
     std::string const& linear_topic_name,
     std::string const& rotate_topic_name,
     dto::props::Platform props)
-    : node_(rclcpp::Node::make_shared(node_name)),
-      executor_(executor),
-      props_(props) {
+    : MiniNode(executor, node_name), props_(props) {
   linear_publisher_ = node_->create_publisher<platform_msg::msg::CmdLinear>(
       std::move(linear_topic_name), 10);
   rotate_publisher_ = node_->create_publisher<platform_msg::msg::CmdRot>(
