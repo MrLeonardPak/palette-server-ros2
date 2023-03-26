@@ -26,6 +26,7 @@ class WalkingPlatformModelNode : public MiniNode,
   void ShiftX(float) override;
   void ShiftY(float) override;
   void Rotate(float) override;
+  void Stop() override;
   void set_x_vel(float) override;
   void set_y_vel(float) override;
   void set_ang_vel(float) override;

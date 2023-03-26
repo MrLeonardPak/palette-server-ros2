@@ -16,6 +16,11 @@ WalkingPlatformModelNode::WalkingPlatformModelNode(
       std::move(rotate_topic_name), 10);
 }
 
+void WalkingPlatformModelNode::Stop() {
+  set_y_vel(0.0f);
+  ShiftY(0.0f);
+}
+
 void WalkingPlatformModelNode::ShiftY(float shift) {
   // TODO отправить сообщение в топик для управления платформой
   auto message = platform_msg::msg::CmdLinear();
